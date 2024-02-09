@@ -11,7 +11,7 @@ import (
 	"gonum.org/v1/gonum/mat"
 )
 
-// split the data into training and testing sets
+// Split the data into training and testing sets
 func splitDataset(X, y *mat.Dense, ratio float64) (*mat.Dense, *mat.Dense, *mat.Dense, *mat.Dense) {
 	nRows, _ := X.Dims()
 	nTrain := int(float64(nRows) * ratio)
@@ -39,7 +39,7 @@ func splitDataset(X, y *mat.Dense, ratio float64) (*mat.Dense, *mat.Dense, *mat.
 	return trainX, trainY, testX, testY
 }
 
-// LinearRegression fits a linear model using the normal equation.
+// LinearRegression fits a linear model
 func LinearRegression(X, y *mat.Dense) *mat.Dense {
 	var XTX mat.Dense
 	XTX.Mul(X.T(), X)
@@ -57,7 +57,7 @@ func LinearRegression(X, y *mat.Dense) *mat.Dense {
 	return &theta
 }
 
-// ComputeMSE calculates the mean squared error between the actual and predicted values.
+// Calculates the mean squared error between the actual and predicted values.
 func ComputeMSE(yActual, yPredicted *mat.Dense) float64 {
 	var diff mat.Dense
 	diff.Sub(yActual, yPredicted)
@@ -71,7 +71,7 @@ func ComputeMSE(yActual, yPredicted *mat.Dense) float64 {
 	// Calculate the mean squared error
 	mse := mat.Sum(squaredDiff) / float64(yActual.RawMatrix().Rows)
 	return mse
-} // Missing closing brace was added here
+}
 
 // CalculateAIC calculates the Akaike Information Criterion for a model.
 func CalculateAIC(mse float64, n, k int) float64 {
@@ -79,7 +79,7 @@ func CalculateAIC(mse float64, n, k int) float64 {
 	return aic
 }
 
-// Predict uses the model coefficients to make predictions on new data.
+// Make predictions on new data
 func Predict(X *mat.Dense, theta *mat.Dense) *mat.Dense {
 	// Number of rows in X
 	rows, _ := X.Dims()
