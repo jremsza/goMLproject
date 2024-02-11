@@ -18,7 +18,7 @@ func splitDataset(X, y *mat.Dense, ratio float64) (*mat.Dense, *mat.Dense, *mat.
 	nTest := nRows - nTrain
 	rand.Seed(time.Now().Unix())
 
-	// Permute the data
+	// Transform the data
 	indices := rand.Perm(nRows)
 	trainIdx, testIdx := indices[:nTrain], indices[nTrain:]
 
@@ -58,7 +58,7 @@ func LinearRegression(X, y *mat.Dense) *mat.Dense {
 	return &theta
 }
 
-// Calculates the mean squared error between the actual and predicted values.
+// Calculate the mean squared error between the actual and predicted values.
 func ComputeMSE(yActual, yPredicted *mat.Dense) float64 {
 	var diff mat.Dense
 	diff.Sub(yActual, yPredicted)
@@ -88,7 +88,7 @@ func Predict(X *mat.Dense, theta *mat.Dense) *mat.Dense {
 	// Create a matrix for the predictions
 	predictions := mat.NewDense(rows, 1, nil)
 
-	// Calculate predictions: predictions = X * theta
+	// Calculate predictions where predictions = X * theta
 	predictions.Mul(X, theta)
 
 	return predictions

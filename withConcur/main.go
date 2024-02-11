@@ -13,14 +13,14 @@ import (
 	"gonum.org/v1/gonum/mat"
 )
 
-// split the data into training and testing sets
+// Split the data into training and testing sets
 func splitDataset(X, y *mat.Dense, ratio float64) (*mat.Dense, *mat.Dense, *mat.Dense, *mat.Dense) {
 	nRows, _ := X.Dims()
 	nTrain := int(float64(nRows) * ratio)
 	nTest := nRows - nTrain
 	rand.Seed(time.Now().Unix())
 
-	// Permute the data
+	// Transform the data
 	indices := rand.Perm(nRows)
 	trainIdx, testIdx := indices[:nTrain], indices[nTrain:]
 
