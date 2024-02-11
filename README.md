@@ -1,37 +1,29 @@
 # goMLproject
-This project explores concurrency in Go using a ML model
+This project explores concurrency in Go using a machine learning (ML) model.
 
 # Package & Project Details:
-Gonum was chosen for building the ML model for this project. Although GoLearn appeared to be a much more strealined and user friendly package for model building, it wasn't abundatnly clear that goroutines could be utilized with that model building apporach. To ensure that concurrency could be utilized gonum was used and the model was built using matrix algebra to fit a least-squares linear regression.
+Gonum was chosen for building the ML model for this project. Although GoLearn appeared to be a much more strealined and user friendly package for model building, it wasn't abundantly clear that goroutines could be utilized with that model building apporach. To ensure that concurrency could be utilized gonum was used and the model was built using matrix algebra to fit a least-squares linear regression.
 
 The project folder contains two programs. The first ML program is housed in the noConcur directory and fulfils the requiement of runing a ML model on the Boston housing data using no concurrency.  Also contained in that directory is a subdirectory called "data". This is a script that loads the dataset from a CSV and is utilized by both programs (See below for comprehensive code details). The other program is housed in the withConcur directory and fulfills the requirment of running the ML program with concurrency. 
 
 # Instructions for Running the Programs:
-Using a bash shell, navigate to the directory that contins the executable. 
+Using a bash shell, navigate to the directory that contains the executable. 
 Within that path run the following:
+
 ./noCuncur
     -or-
 ./withConcur
 
 # Code Walkthrough
 
-## Data Loading
-
 ### Loading the Dataset from CSV
 
-The data.go file found in the noConcur directory is used to load the dataset from the boston.csv file. The `LoadDataset` function within the `data` package handles this step, transforming raw data into structured matrices that the machine learning models can use.
+The data.go file found in the noConcur directory is used to load the dataset from the boston.csv file for both programs. The `LoadDataset` function within the `data` package handles this step, transforming raw data into structured matrices that the machine learning models can use.
 
 #### Function Overview
 
 - **Name**: `LoadDataset`
 - **Purpose**: Reads a dataset from a CSV file and transforms it into matrices for the predictors and the target variables.
-- **Inputs**:
-  - `filePath`: A `string` representing the path to the CSV file containing the dataset.
-  - `selectedColumns`: An `[]int` slice indicating the columns to be used as predictors. The target variable is in the last column of the CSV.
-- **Outputs**:
-  - `*mat.Dense`: A matrix containing the selected predictors from the CSV file.
-  - `*mat.Dense`: A matrix containing the target variable from the CSV file.
-  - `error`: An error object that will be non-nil if an error occurs during the file reading or data processing steps.
 
 #### Implementation Details
 
@@ -57,15 +49,6 @@ The Go ML program includes a preprocessing step that prepares the data for the m
 
 - **Name**: `splitDataset`
 - **Purpose**: Splits a dataset into training and testing sets based on a specified ratio.
-- **Inputs**:
-  - `X`: A `*mat.Dense` matrix representing the feature dataset.
-  - `y`: A `*mat.Dense` matrix representing the labels or targets associated with `X`.
-  - `ratio`: A `float64` value representing the proportion of the dataset to be used as the training set.
-- **Outputs**: Four `*mat.Dense` matrices:
-  - `trainX`: Training set features.
-  - `trainY`: Training set labels.
-  - `testX`: Testing set features.
-  - `testY`: Testing set labels.
 
 #### Implementation Details
 
@@ -87,15 +70,10 @@ The Go ML program includes functionality for fitting a linear model to the datas
 
 - **Name**: `LinearRegression`
 - **Purpose**: Fits a linear model to the provided dataset by calculating the regression coefficients that minimize the sum of the squared residuals.
-- **Inputs**:
-  - `X`: A `*mat.Dense` matrix containing the predictor variables.
-  - `y`: A `*mat.Dense` matrix containing the target variable.
-- **Output**:
-  - `*mat.Dense`: A matrix containing the calculated regression coefficients (theta).
 
 #### Implementation Details
 
-The linear regression implementation follows the normal equation method, which analytically solves for the coefficients that minimize the cost function. The steps involved in this process include:
+The linear regression implementation solves for the coefficients that minimize the cost function. The steps involved in this process include:
 
 1. **Computing the Transpose of X and Multiplying by X**: The function first calculates \(X^T X\) (where \(X^T\) is the transpose of \(X\)), resulting in a matrix that is then used to compute the inverse necessary for the normal equation.
 
@@ -119,11 +97,6 @@ Metrics are computed through the `ComputeMSE` and `CalculateAIC` functions, prov
 
 - **Name**: `ComputeMSE`
 - **Purpose**: Calculates the Mean Squared Error (MSE) between the actual and predicted values, a common metric for assessing model accuracy.
-- **Inputs**:
-  - `yActual`: A `*mat.Dense` matrix containing the actual target variable values.
-  - `yPredicted`: A `*mat.Dense` matrix containing the predicted values from the model.
-- **Output**:
-  - `float64`: The calculated MSE value.
 
 **Implementation Details**:
 
@@ -133,12 +106,6 @@ The MSE is calculated by first determining the difference between the actual and
 
 - **Name**: `CalculateAIC`
 - **Purpose**: Computes the Akaike Information Criterion (AIC) for the model, a measure of model quality that balances goodness of fit with model complexity.
-- **Inputs**:
-  - `mse`: The Mean Squared Error of the model, as a `float64`.
-  - `n`: An `int` representing the number of observations.
-  - `k`: An `int` representing the number of parameters in the model.
-- **Output**:
-  - `float64`: The calculated AIC value.
 
 **Implementation Details**:
 
@@ -156,11 +123,6 @@ The `Predict` function applies the learned regression coefficients (theta) to ne
 
 - **Name**: `Predict`
 - **Purpose**: Generates predictions for a new set of data using the fitted linear model.
-- **Inputs**:
-  - `X`: A `*mat.Dense` matrix containing the new data's predictor variables.
-  - `theta`: A `*mat.Dense` matrix representing the regression coefficients obtained from the model fitting process.
-- **Output**:
-  - `*mat.Dense`: A matrix containing the predicted values for the target variable based on the input data and the model's coefficients.
 
 #### Implementation Details
 
@@ -173,3 +135,36 @@ The prediction process involves a matrix multiplication operation between the ne
 3. **Output**: The result of the matrix multiplication is a new matrix where each element represents the predicted value for the corresponding observation in the input data. This matrix is returned to the caller, allowing for further analysis or evaluation of the predicted values.
 
 ---
+
+# Concurrency Application
+
+Much of the code see in the withConcur program is code used from noConcur but with added concurrency features in the prediction function.
+
+#### Function Overview
+
+- **Name**: `PredictConcurrently`
+- **Purpose**: Generates predictions for a new set of data using the fitted linear model using goroutines.
+
+`PredictConcurrently` takes an input matrix `X` of features and a matrix `theta` of model parameters, along with a channel for sending the predictions back to the caller, and a `sync.WaitGroup` for managing concurrency.
+
+### Parameters
+
+- `X *mat.Dense`: The input data on which predictions are to be made, structured as a dense matrix.
+- `theta *mat.Dense`: The model parameters used for making predictions, also structured as a dense matrix.
+- `resultsChan chan<- *mat.Dense`: A channel for sending the prediction results back to the main routine.
+- `wg *sync.WaitGroup`: A synchronization primitive that waits for a collection of goroutines to finish executing.
+
+### Usage
+
+1. Split input data (`X`) into smaller batches that can be processed in parallel.
+2. Initialize a `sync.WaitGroup` and a results channel.
+3. For each batch of input data:
+   - Call `wg.Add(1)` to signal the addition of a concurrent task.
+   - Invoke `PredictConcurrently` in a goroutine, passing the batch of input data, model parameters, results channel, and wait group.
+4. After launching all goroutines, call `wg.Wait()` to ensure all predictions have been completed and sent through the channel.
+5. Collect the predictions from the results channel as they arrive.
+
+
+# Remarks to Managment
+
+The results of the 100 repetitions benchmark trial demonstrated that the concurrency model is roughly twice as fast compared to the ML approach without concurrency. It is my recomendation that the concurency appraoch be utilized going forword for building ML models.
