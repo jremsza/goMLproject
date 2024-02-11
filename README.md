@@ -88,7 +88,7 @@ The MSE is calculated by first determining the difference between the actual and
 
 **Implementation**:
 
-The AIC is calculated using the MSE, the number of observations (`n`), and the number of model parameters (`k`). The formula for AIC highlights the trade-off between the goodness of fit (as indicated by the MSE) and the complexity of the model (reflected by the number of parameters).
+The AIC is calculated using the MSE, the number of observations (`n`), and the number of model parameters (`k`).
 
 ---
 
@@ -132,7 +132,6 @@ Much of the code seen in the withConcur program is code used from noConcur, but 
 5. `resultsChan <- predictions`: This line sends the predictions matrix to the resultsChan channel. This allows the result of the computation to be used elsewhere in the program.
 
 The main function initiates the PredictConcurrently function running the PredictConcurrently function in a separate goroutine. It uses a WaitGroup and a channel to synchronize with that goroutine. The PredictConcurrently function is expected to send a *mat.Dense value on the resultsChan channel when it's done, and to call wg.Done() to depleate the WaitGroup counter.
-
 
 # Remarks to Managment
 
