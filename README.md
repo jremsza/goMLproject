@@ -10,11 +10,11 @@ The project folder contains two programs. The first ML program is housed in the 
 Using a bash shell, navigate to the directory that contains the program executable. 
 Within that path run the following:
 
--./noCuncur-
+    ./noCuncur
 
-    or
+or
 
--./withConcur-
+    ./withConcur
 
 The program will run the ML model on the Boston housing dataset and print the MSE and AIC for a subset of predictors.
 
