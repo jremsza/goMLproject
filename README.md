@@ -7,7 +7,7 @@ Gonum was the library chosen for building the ML model for this project. Althoug
 The project folder contains two programs. The first ML program is housed in the noConcur directory and fulfills the requirement of running a ML model on the Boston housing data with a subset of predictors using no concurrency. Also contained in that directory is a subdirectory called "data". This is a script that loads the dataset from a CSV and is utilized by both programs (See below for comprehensive code details). The other program is housed in the withConcur directory and fulfills the requirement of running the ML program with concurrency.
 
 # Instructions for Running the Programs:
-Using a bash shell, navigate to the directory that contains the executable. 
+Using a bash shell, navigate to the directory that contains the program executable. 
 Within that path run the following:
 
 ./noCuncur
@@ -15,6 +15,8 @@ Within that path run the following:
     -or-
 
 ./withConcur
+
+The program will run the ML model on the Boston housing dataset and print the MSE and AIC for a subset of predictors.
 
 # Code Walkthrough
 
@@ -121,7 +123,7 @@ Much of the code seen in the withConcur program is code used from noConcur, but 
 - `resultsChan chan<- *mat.Dense`: A channel for sending the prediction results back to the main routine.
 - `wg *sync.WaitGroup`: A synchronization that waits for goroutines to finish executing.
 
-### Usage
+#### Implementation
 
 1. `defer wg.Done()` is called when the function starts, and ensures the goroutine has finished.
 2. `rows, _ := X.Dims()`: gets the number of rows in the matrix X.
