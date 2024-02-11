@@ -42,7 +42,7 @@ This process results in two slices of `float64` values, which are then used to c
 
 ### Splitting the Dataset
 
-The Go ML program includes a preprocessing step that prepares the data for the machine learning model. This step involves splitting the input dataset into training and testing sets, a common practice in machine learning to evaluate models accurately. The function responsible for this operation is `splitDataset`.
+The Go ML program includes a preprocessing step that prepares the data for the machine learning model. This step involves splitting the input dataset into training and testing sets with the function `splitDataset`.
 
 #### Implementation
 
@@ -50,7 +50,7 @@ The function first determines the number of rows to include in the training set 
 
 Matrix operations are utilized to create the training and testing subsets for both the features (`X`) and labels (`y`). The function:
 - Initializes new matrices for the training and testing sets with appropriate dimensions.
-- Copies rows from the original dataset into the new matrices based on the shuffled indices, ensuring that each set receives the correct portion of data as per the specified ratio.
+- Copies rows from the original dataset into the new matrices based on the shuffled indices, ensuring that each set receives the correct portion of data as per the specified ratio see in `func main`.
 
 ---
 
@@ -58,7 +58,7 @@ Matrix operations are utilized to create the training and testing subsets for bo
 
 ### Linear Regression
 
-The Go ML program includes functionality for fitting a linear model to the dataset. This capability is utilized in the `LinearRegression` function, which calculates the regression coefficients that best fit the given data. 
+The Go ML program includes functionality for fitting a linear model to the dataset. This is done in the `LinearRegression` function, which calculates the regression coefficients that best fit the given data. 
 
 #### Implementation
 
@@ -66,9 +66,9 @@ The linear regression implementation solves for the coefficients that minimize t
 
 1. **Computing the Transpose of X and Multiplying by X**: The function first calculates \(X^T X\) (where \(X^T\) is the transpose of \(X\)), resulting in a matrix that is then used to compute the inverse necessary for the normal equation.
 
-2. **Inverting \(X^T X\)**: The function attempts to compute the inverse of \(X^T X\). If the matrix is singular or near-singular, indicating that it cannot be inverted or the inversion is numerically unstable, the function will log a fatal error and terminate.
+2. **Inverting \(X^T X\)**: The function computes the inverse of \(X^T X\). , the function will log a fatal error and terminate if the matrix is singular or near-singular.
 
-3. **Multiplying the Transpose of X by y**: It calculates \(X^T y\), preparing the other component required for the normal equation.
+3. **Multiplying the Transpose of X by y**: Calculates \(X^T y\), preparing the other component required for the normal equation.
 
 4. **Calculating the Regression Coefficients (Theta)**: The function then multiplies the inverse of \(X^T X\) by \(X^T y\) to solve for the regression coefficients, denoted as theta (\(\theta\)).
 
@@ -102,17 +102,17 @@ The `Predict` function applies the learned regression coefficients (theta) to ne
 
 The prediction process involves a matrix multiplication operation between the new data matrix `X` and the regression coefficients matrix `theta`. This aligns with the linear regression formula \(Y = X\theta\), where `Y` represents the predicted values.
 
-1. **Preparing the Data**: The function first determines the dimensions of the input data matrix `X` to ensure that the predictions matrix is initialized with the correct number of rows (each corresponding to a prediction for an observation in the input data).
+1. **Preparing the Data**: The function first determines the dimensions of the input data matrix `X` to ensure that the predictions matrix is initialized with the correct number of rows. 
 
 2. **Matrix Multiplication**: This step multiplies the input data matrix `X` by the coefficients matrix `theta` to produce the predicted values. This operation applies the model to each row of input data, generating a prediction for each observation.
 
-3. **Output**: The result of the matrix multiplication is a new matrix where each element represents the predicted value for the corresponding observation in the input data. This matrix is returned to the caller, allowing for further analysis of the predicted values.
+3. **Output**: The result of the matrix multiplication is a new matrix where each element represents the predicted value for the corresponding observation in the input data. This matrix is returned to the caller for further analysis of the predicted values.
 
 ---
 
 # Concurrency Application
 
-Much of the code seen in the withConcur program is code used from noConcur, but with added concurrency features in the prediction function. This function is designed to be run as a goroutine. It performs its computation concurrently with other goroutines, and it uses a sync.WaitGroup and a channel to synchronize with them.
+Much of the code seen in the withConcur program is code taken from noConcur, but with added concurrency features in the prediction function. This function is designed to be run as a goroutine. It performs its computation concurrently with other goroutines, and it uses a sync.WaitGroup and a channel to synchronize with them.
 
 `PredictConcurrently` takes an input matrix `X`, a pointer of Dense matrix X, and a matrix `theta`, along with a channel for sending the predictions back to the caller, and a `sync.WaitGroup` for managing concurrency.
 
