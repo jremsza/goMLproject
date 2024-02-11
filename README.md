@@ -131,6 +131,8 @@ Much of the code seen in the withConcur program is code used from noConcur, but 
 4. `predictions.Mul(X, theta)`: This line performs the matrix multiplication.
 5. `resultsChan <- predictions`: This line sends the predictions matrix to the resultsChan channel. This allows the result of the computation to be used elsewhere in the program.
 
+The main function initiates the PredictConcurrently function running the PredictConcurrently function in a separate goroutine. It uses a WaitGroup and a channel to synchronize with that goroutine. The PredictConcurrently function is expected to send a *mat.Dense value on the resultsChan channel when it's done, and to call wg.Done() to depleate the WaitGroup counter.
+
 
 # Remarks to Managment
 
