@@ -10,7 +10,7 @@ The project folder contains two programs. The first ML program is housed in the 
 Using a bash shell, navigate to the directory that contains the program executable. 
 Within that path run the following:
 
-    ./noCuncur
+    ./noConcur
 
 or
 
