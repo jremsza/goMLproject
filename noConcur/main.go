@@ -41,6 +41,7 @@ func splitDataset(X, y *mat.Dense, ratio float64) (*mat.Dense, *mat.Dense, *mat.
 
 // LinearRegression fits a linear model
 func LinearRegression(X, y *mat.Dense) *mat.Dense {
+
 	var XTX mat.Dense
 	XTX.Mul(X.T(), X)
 
