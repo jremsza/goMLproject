@@ -4,7 +4,7 @@ This project explores concurrency in Go using a machine learning (ML) model.
 # Package & Project Details:
 `Gonum` was the library chosen for building the ML model for this project. Although `GoLearn` appeared to be a more streamlined and user-friendly package for model building, it wasn't abundantly clear that goroutines could be utilized with that model building approach. To ensure that concurrency could be utilized, `Gonum` was used, and the model was built using matrix algebra to fit a least-squares linear regression.
 
-The project folder contains two programs. The first ML program is housed in the noConcur directory and fulfills the requirement of running a ML model on the Boston housing data with a subset of predictors using no concurrency. Also contained in that directory is a subdirectory called "data". This is a script that loads the dataset from a CSV and is utilized by both programs (See below for comprehensive code details). The other program is housed in the withConcur directory and fulfills the requirement of running the ML program with concurrency.
+The project folder contains two programs. The first ML program is housed in the `noConcur` directory and fulfills the requirement of running a ML model on the Boston housing data with a subset of predictors using no concurrency. Also contained in that directory is a subdirectory called `data`. This is a script that loads the dataset from a CSV and is utilized by both programs (See below for comprehensive code details). The other program is housed in the `withConcur` directory and fulfills the requirement of running the ML program with concurrency.
 
 # Instructions for Running the Programs:
 Using a bash shell, navigate to the directory that contains the program executable. 
